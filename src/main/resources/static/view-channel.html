@@ -2,21 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Channel Details - E-Channeling System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Channel - E-Channeling System</title>
+    <!-- External CSS Libraries -->
+    <!-- Bootstrap CSS for responsive layout and components -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons for visual elements -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
+        /* Base styles for the page */
         body {
             font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 30px;
             background: url('/images/2.png') no-repeat center center fixed;
             background-size: cover;
             color: #003366;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
             position: relative;
         }
 
+        /* Overlay gradient for better text readability */
         body::before {
             content: '';
             position: absolute;
@@ -29,10 +33,13 @@
             z-index: -1;
         }
 
+        /* Container padding for consistent spacing */
         .container {
-            width: 95%;
-            max-width: 800px;
-            margin: auto;
+            padding: 40px 20px;
+        }
+
+        /* Main content container with glassmorphism effect */
+        .view-container {
             background: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 24px;
@@ -43,21 +50,25 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
+        /* Fade-in animation for smooth page load */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Header section styling */
         .header-box {
-            border: none;
             background: linear-gradient(135deg, rgba(0, 122, 204, 0.1), rgba(0, 64, 128, 0.1));
             padding: 30px;
             border-radius: 20px;
             margin-bottom: 40px;
             text-align: center;
             box-shadow: 0 8px 20px rgba(0, 122, 204, 0.15);
+            position: relative;
+            overflow: hidden;
         }
 
+        /* Header title styling */
         .header-box h1 {
             font-size: 2.8em;
             color: #004080;
@@ -67,243 +78,315 @@
             letter-spacing: -0.5px;
         }
 
-        .details-section {
+        /* Information card styling */
+        .info-card {
             background: white;
             border-radius: 16px;
-            padding: 30px;
+            padding: 25px;
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 122, 204, 0.1);
         }
 
-        .section-title {
+        /* Hover effect for info cards */
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card header styling */
+        .info-card h3 {
             color: #004080;
-            font-size: 1.4em;
-            font-weight: 600;
+            font-size: 1.5em;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #007acc;
+            border-bottom: 2px solid rgba(0, 122, 204, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .detail-row {
+        /* Individual info item styling */
+        .info-item {
             display: flex;
+            align-items: flex-start;
             margin-bottom: 15px;
             padding: 10px;
-            background: rgba(0, 122, 204, 0.05);
             border-radius: 12px;
             transition: all 0.3s ease;
         }
 
-        .detail-row:hover {
-            background: rgba(0, 122, 204, 0.1);
-            transform: translateX(5px);
+        /* Hover effect for info items */
+        .info-item:hover {
+            background: rgba(0, 122, 204, 0.05);
         }
 
-        .detail-label {
-            flex: 1;
+        /* Label styling for info items */
+        .info-label {
             font-weight: 600;
             color: #004080;
             min-width: 150px;
-        }
-
-        .detail-value {
-            flex: 2;
-            color: #333;
-        }
-
-        .button-group {
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 40px;
+            align-items: center;
+            gap: 8px;
         }
 
-        .button-group button {
+        /* Value styling for info items */
+        .info-value {
+            color: #666;
+            flex: 1;
+        }
+
+        /* Custom button styling */
+        .btn-custom {
             background: linear-gradient(135deg, #007acc, #004080);
             color: white;
             border: none;
-            padding: 16px 32px;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-weight: 600;
-            box-shadow: 0 6px 20px rgba(0, 122, 204, 0.2);
             letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
             text-transform: uppercase;
-            min-width: 180px;
+            transition: all 0.3s ease;
         }
 
-        .button-group button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .button-group button:hover::before {
-            left: 100%;
-        }
-
-        .button-group button:hover {
-            transform: translateY(-3px);
+        /* Button hover effect */
+        .btn-custom:hover {
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 122, 204, 0.3);
+            color: white;
         }
 
-        .button-group button:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(0, 122, 204, 0.2);
+        /* Icon spacing in buttons */
+        .btn-custom i {
+            margin-right: 8px;
         }
 
-        .button-group button.back {
-            background: linear-gradient(135deg, #004080, #002f66);
+        /* Status badge styling */
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
+        /* Status badge colors */
+        .status-upcoming {
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: white;
+        }
+
+        .status-completed {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+        }
+
+        .status-cancelled {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        /* Responsive design adjustments */
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
-                margin: 20px;
+            }
+
+            .view-container {
+                padding: 20px;
             }
 
             .header-box h1 {
                 font-size: 2.2em;
             }
 
-            .detail-row {
-                flex-direction: column;
+            .info-label {
+                min-width: 120px;
             }
 
-            .detail-label {
-                margin-bottom: 5px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .button-group button {
+            .btn-custom {
                 width: 100%;
+                margin-bottom: 10px;
             }
         }
     </style>
 </head>
 <body>
+<!-- Main container -->
 <div class="container">
-    <div class="header-box">
-        <h1>Channel Details</h1>
-    </div>
+    <!-- View container with glassmorphism effect -->
+    <div class="view-container">
+        <!-- Header section -->
+        <div class="header-box">
+            <h1><i class="bi bi-calendar-check"></i> Channel Details</h1>
+        </div>
 
-    <div class="details-section">
-        <div class="section-title">Basic Information</div>
-        <div class="detail-row">
-            <div class="detail-label">Channel ID:</div>
-            <div class="detail-value" id="id"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Hospital/Clinic:</div>
-            <div class="detail-value" id="hospital"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Doctor Name:</div>
-            <div class="detail-value" id="doctorName"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Specialization:</div>
-            <div class="detail-value" id="specialization"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Date:</div>
-            <div class="detail-value" id="date"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Time:</div>
-            <div class="detail-value" id="time"></div>
-        </div>
-    </div>
+        <!-- Information sections -->
+        <div class="row">
+            <!-- Basic Information Section -->
+            <div class="col-md-6">
+                <div class="info-card">
+                    <h3><i class="bi bi-info-circle"></i> Basic Information</h3>
+                    <!-- Channel details -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-upc"></i> Channel ID</div>
+                        <div class="info-value" id="channelId"></div>
+                    </div>
+                    <!-- Hospital information -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-hospital"></i> Hospital</div>
+                        <div class="info-value" id="hospital"></div>
+                    </div>
+                    <!-- Specialization details -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-briefcase"></i> Specialization</div>
+                        <div class="info-value" id="specialization"></div>
+                    </div>
+                    <!-- Doctor information -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-person-badge"></i> Doctor</div>
+                        <div class="info-value" id="doctorName"></div>
+                    </div>
+                    <!-- Appointment date -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-calendar-date"></i> Date</div>
+                        <div class="info-value" id="date"></div>
+                    </div>
+                    <!-- Appointment time -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-clock"></i> Time</div>
+                        <div class="info-value" id="time"></div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="details-section">
-        <div class="section-title">Patient Information</div>
-        <div class="detail-row">
-            <div class="detail-label">Full Name:</div>
-            <div class="detail-value" id="patientName"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Age:</div>
-            <div class="detail-value" id="patientAge"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Gender:</div>
-            <div class="detail-value" id="patientGender"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">NIC Number:</div>
-            <div class="detail-value" id="patientNIC"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Phone Number:</div>
-            <div class="detail-value" id="patientPhone"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Email Address:</div>
-            <div class="detail-value" id="patientEmail"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Address:</div>
-            <div class="detail-value" id="patientAddress"></div>
-        </div>
-    </div>
+            <!-- Patient Information Section -->
+            <div class="col-md-6">
+                <div class="info-card">
+                    <h3><i class="bi bi-person"></i> Patient Information</h3>
+                    <!-- Patient name -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-person"></i> Name</div>
+                        <div class="info-value" id="patientName"></div>
+                    </div>
+                    <!-- Patient age -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-calendar"></i> Age</div>
+                        <div class="info-value" id="patientAge"></div>
+                    </div>
+                    <!-- Patient gender -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-gender-ambiguous"></i> Gender</div>
+                        <div class="info-value" id="patientGender"></div>
+                    </div>
+                    <!-- Patient NIC -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-card-text"></i> NIC</div>
+                        <div class="info-value" id="patientNIC"></div>
+                    </div>
+                    <!-- Patient phone -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-telephone"></i> Phone</div>
+                        <div class="info-value" id="patientPhone"></div>
+                    </div>
+                    <!-- Patient email -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-envelope"></i> Email</div>
+                        <div class="info-value" id="patientEmail"></div>
+                    </div>
+                    <!-- Patient address -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-geo-alt"></i> Address</div>
+                        <div class="info-value" id="patientAddress"></div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="details-section">
-        <div class="section-title">Medical Information</div>
-        <div class="detail-row">
-            <div class="detail-label">Medical History:</div>
-            <div class="detail-value" id="medicalHistory"></div>
+            <!-- Medical Information Section -->
+            <div class="col-12">
+                <div class="info-card">
+                    <h3><i class="bi bi-clipboard2-pulse"></i> Medical Information</h3>
+                    <!-- Medical history -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-journal-medical"></i> Medical History</div>
+                        <div class="info-value" id="medicalHistory"></div>
+                    </div>
+                    <!-- Current medications -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-capsule"></i> Current Medications</div>
+                        <div class="info-value" id="currentMedications"></div>
+                    </div>
+                    <!-- Allergies -->
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-exclamation-triangle"></i> Allergies</div>
+                        <div class="info-value" id="allergies"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="detail-row">
-            <div class="detail-label">Current Medications:</div>
-            <div class="detail-value" id="currentMedications"></div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Allergies:</div>
-            <div class="detail-value" id="allergies"></div>
-        </div>
-    </div>
 
-    <div class="button-group">
-        <button class="back" onclick="window.location.href='channel-table.html'">Back to List</button>
+        <!-- Action buttons -->
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="channel-table.html" class="btn btn-custom">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+            <button class="btn btn-custom" onclick="window.print()">
+                <i class="bi bi-printer"></i> Print Details
+            </button>
+        </div>
     </div>
 </div>
 
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Load channel data from URL parameters
     window.onload = function() {
-        const params = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(window.location.search);
         
-        // List of all fields to populate
-        const fields = [
-            'id', 'hospital', 'specialization', 'doctorName', 'date', 'time',
-            'patientName', 'patientAge', 'patientGender', 'patientNIC',
-            'patientPhone', 'patientEmail', 'patientAddress',
-            'medicalHistory', 'currentMedications', 'allergies'
-        ];
+        // Field mapping for data population
+        const fields = {
+            channelId: 'id',
+            hospital: 'hospital',
+            specialization: 'specialization',
+            doctorName: 'doctorName',
+            date: 'date',
+            time: 'time',
+            patientName: 'patientName',
+            patientAge: 'patientAge',
+            patientGender: 'patientGender',
+            patientNIC: 'patientNIC',
+            patientPhone: 'patientPhone',
+            patientEmail: 'patientEmail',
+            patientAddress: 'patientAddress',
+            medicalHistory: 'medicalHistory',
+            currentMedications: 'currentMedications',
+            allergies: 'allergies'
+        };
 
-        // Populate each field
-        fields.forEach(field => {
-            const element = document.getElementById(field);
+        // Populate all fields with data from URL parameters
+        Object.entries(fields).forEach(([elementId, paramName]) => {
+            const element = document.getElementById(elementId);
             if (element) {
-                const value = params.get(field);
-                element.textContent = value || 'Not provided';
+                const value = urlParams.get(paramName) || '-';
+                element.textContent = value;
             }
         });
+
+        // Format date to a more readable format
+        const dateElement = document.getElementById('date');
+        if (dateElement && dateElement.textContent !== '-') {
+            const date = new Date(dateElement.textContent);
+            dateElement.textContent = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
     };
 </script>
 </body>
