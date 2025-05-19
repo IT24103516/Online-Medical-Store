@@ -2,101 +2,233 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Online Medical Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Channeling System - Home</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body {
-            margin: 0;
-            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
             background: url('/images/2.png') no-repeat center center fixed;
             background-size: cover;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
+            color: #003366;
+            min-height: 100vh;
+            position: relative;
         }
 
-        .container {
-            margin-top: 40px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px 30px;
-            border-radius: 20px;
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 122, 204, 0.1), rgba(0, 64, 128, 0.1));
+            backdrop-filter: blur(5px);
+            z-index: -1;
+        }
+
+        .hero-section {
+            padding: 100px 0;
             text-align: center;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1s ease-in-out;
-            width: 90%;
-            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
         }
 
-        h1 {
-            font-size: 2.8em;
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
             color: #004080;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 40px;
         }
 
-        .gallery img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
+        .btn-hero {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .gallery img:hover {
-            transform: scale(1.05);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 14px 28px;
-            font-size: 1em;
-            background-color: #007acc;
-            color: white;
+        .btn-primary {
+            background: linear-gradient(135deg, #007acc, #004080);
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-decoration: none;
-            margin-top: 20px;
         }
 
-        .btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 10px 20px rgba(0, 122, 204, 0.4);
-            background-color: #005f99;
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.3);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .features-section {
+            padding: 80px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 122, 204, 0.1);
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #007acc;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #004080;
+            margin-bottom: 15px;
+        }
+
+        .feature-text {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, #007acc, #004080);
+            color: white;
+            border-radius: 24px;
+            padding: 60px 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn-cta {
+            background: white;
+            color: #004080;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+            color: #004080;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-section {
+                padding: 60px 20px;
+                margin: 20px;
+            }
+
+            .feature-card {
+                margin-bottom: 20px;
+            }
+
+            .cta-card {
+                padding: 40px 20px;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Welcome to the Online Medical Store</h1>
-
-    <div class="gallery">
-        <img src="/images/3.webp" alt="Medicine Shelf">
-        <img src="/images/7.jpeg" alt="Doctor">
-        <img src="/images/4.jpeg" alt="Pharmacy Counter">
-        <img src="/images/6.jpg" alt="Hospital Building">
-        <img src="/images/8.jpeg" alt="Nurse and Patient">
-        <img src="/images/9.jpeg" alt="Pills and Capsules">
-        <img src="/images/10.jpg" alt="Pills and Capsules">
-        <img src="/images/11.jpg" alt="Pills and Capsules">
+    <!-- Hero Section -->
+    <div class="container">
+        <div class="hero-section">
+            <h1 class="hero-title">Welcome to E-Channeling System</h1>
+            <p class="hero-subtitle">Streamline your medical appointments with our advanced channeling management system</p>
+            <a href="channel.html" class="btn btn-primary btn-hero">
+                <i class="bi bi-plus-circle"></i> Add New Channel
+            </a>
+        </div>
     </div>
 
-    <a class="btn" href="channel.html">🩺 E-Channeling</a>
-</div>
+    <!-- Features Section -->
+    <div class="container features-section" id="features">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="bi bi-calendar-check feature-icon"></i>
+                    <h3 class="feature-title">Easy Scheduling</h3>
+                    <p class="feature-text">Book appointments with your preferred doctors quickly and efficiently. Our system ensures a smooth scheduling process.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="bi bi-hospital feature-icon"></i>
+                    <h3 class="feature-title">Multiple Hospitals</h3>
+                    <p class="feature-text">Access a wide network of hospitals and clinics. Choose from various specializations and experienced doctors.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="bi bi-clock-history feature-icon"></i>
+                    <h3 class="feature-title">Real-time Updates</h3>
+                    <p class="feature-text">Get instant notifications and updates about your appointments. Manage your schedule with ease.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="container cta-section">
+        <div class="cta-card">
+            <h2 class="cta-title">Ready to Get Started?</h2>
+            <p class="cta-text">Join thousands of patients who have simplified their medical appointments with our system.</p>
+            <a href="channel.html" class="btn btn-cta">
+                <i class="bi bi-arrow-right-circle"></i> Book Your Appointment Now
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

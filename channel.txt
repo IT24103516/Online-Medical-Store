@@ -1,1 +1,1 @@
-CH1747638510791871,Asiri Central Hospital,Dr. Sunil Fernando,Neurology,2025-05-23,03:38,Oshan Sadhanjana,26,Male,993102059V,0704120358,chamika@gmail.com,Uva Wellassa,Nothing,Nothing,Bla bla bla,null
+CH1747638510791871,Asiri Central Hospital,Dr. Sunil Fernando,Neurology,2025-05-23,03:38,Oshan Sadhanjana,26,Male,993102059V,0704120358,chamika@gmail.com,Uva Wellassa fffff,Nothing,Nothing,Bla bla bla,null

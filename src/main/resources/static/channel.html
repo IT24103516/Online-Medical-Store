@@ -98,9 +98,28 @@
             border-color: #007acc;
         }
 
-        .form-control[readonly] {
-            background-color: #f8f9fa;
-            cursor: not-allowed;
+        .form-control.is-invalid, .form-select.is-invalid {
+            border-color: #dc3545;
+            background-image: none;
+        }
+
+        .form-control.is-valid, .form-select.is-valid {
+            border-color: #198754;
+            background-image: none;
+        }
+
+        .invalid-feedback {
+            font-size: 0.875em;
+            color: #dc3545;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .was-validated .form-control:invalid ~ .invalid-feedback,
+        .was-validated .form-select:invalid ~ .invalid-feedback,
+        .form-control.is-invalid ~ .invalid-feedback,
+        .form-select.is-invalid ~ .invalid-feedback {
+            display: block;
         }
 
         .btn-primary {
@@ -184,10 +203,57 @@
             border-bottom: 2px solid rgba(0, 122, 204, 0.2);
         }
 
-        .invalid-feedback {
-            font-size: 0.875em;
+        .validation-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+        }
+
+        .was-validated .form-control:valid ~ .validation-icon.valid-icon,
+        .was-validated .form-select:valid ~ .validation-icon.valid-icon,
+        .form-control.is-valid ~ .validation-icon.valid-icon,
+        .form-select.is-valid ~ .validation-icon.valid-icon {
+            display: block;
+            color: #198754;
+        }
+
+        .was-validated .form-control:invalid ~ .validation-icon.invalid-icon,
+        .was-validated .form-select:invalid ~ .validation-icon.invalid-icon,
+        .form-control.is-invalid ~ .validation-icon.invalid-icon,
+        .form-select.is-invalid ~ .validation-icon.invalid-icon {
+            display: block;
             color: #dc3545;
-            margin-top: 4px;
+        }
+
+        .form-floating {
+            position: relative;
+        }
+
+        .form-floating > .form-control,
+        .form-floating > .form-select {
+            height: calc(3.5rem + 2px);
+            padding: 1rem 0.75rem;
+        }
+
+        .form-floating > label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 1rem 0.75rem;
+            pointer-events: none;
+            border: 1px solid transparent;
+            transform-origin: 0 0;
+            transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+        }
+
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label,
+        .form-floating > .form-select ~ label {
+            opacity: .65;
+            transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
         }
     </style>
 </head>
@@ -195,7 +261,7 @@
 <div class="container">
     <div class="form-container">
         <div class="header-box">
-            <h1><i class="bi bi-calendar-plus"></i> Add New Channel</h1>
+            <h1><i class="bi bi-plus-circle"></i> Add New Channel</h1>
         </div>
 
         <div class="success-message" id="successMessage">
@@ -211,6 +277,8 @@
                             <i class="bi bi-upc"></i> Channel ID
                         </label>
                         <input type="text" class="form-control" id="channelId" name="channelId" readonly>
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                     </div>
                     <div class="col-md-6">
                         <label for="hospital" class="form-label">
@@ -224,6 +292,8 @@
                             <option value="Durdans Hospital">Durdans Hospital</option>
                             <option value="Hemas Hospital">Hemas Hospital</option>
                         </select>
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                         <div class="invalid-feedback">Please select a hospital/clinic</div>
                     </div>
                     <div class="col-md-6">
@@ -238,6 +308,8 @@
                             <option value="Orthopedics">Orthopedics</option>
                             <option value="Dermatology">Dermatology</option>
                         </select>
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                         <div class="invalid-feedback">Please select a specialization</div>
                     </div>
                     <div class="col-md-6">
@@ -247,20 +319,26 @@
                         <select class="form-select" id="doctorName" name="doctorName" required>
                             <option value="">Select Doctor</option>
                         </select>
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                         <div class="invalid-feedback">Please select a doctor</div>
                     </div>
                     <div class="col-md-6">
                         <label for="date" class="form-label">
                             <i class="bi bi-calendar-date"></i> Date
                         </label>
-                        <input type="date" class="form-control" id="date" name="date" required>
-                        <div class="invalid-feedback">Please select a date</div>
+                        <input type="date" class="form-control" id="date" name="date" required min="">
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
+                        <div class="invalid-feedback">Please select a valid date</div>
                     </div>
                     <div class="col-md-6">
                         <label for="time" class="form-label">
                             <i class="bi bi-clock"></i> Time
                         </label>
                         <input type="time" class="form-control" id="time" name="time" required>
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                         <div class="invalid-feedback">Please select a time</div>
                     </div>
                 </div>
@@ -273,14 +351,20 @@
                         <label for="patientName" class="form-label">
                             <i class="bi bi-person"></i> Patient Name
                         </label>
-                        <input type="text" class="form-control" id="patientName" name="patientName" required>
-                        <div class="invalid-feedback">Please enter patient name</div>
+                        <input type="text" class="form-control" id="patientName" name="patientName" required 
+                               pattern="[A-Za-z\s]{2,50}" minlength="2" maxlength="50">
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
+                        <div class="invalid-feedback">Please enter a valid name (2-50 characters, letters only)</div>
                     </div>
                     <div class="col-md-3">
                         <label for="patientAge" class="form-label">
                             <i class="bi bi-calendar"></i> Age
                         </label>
-                        <input type="number" class="form-control" id="patientAge" name="patientAge" required min="0" max="120">
+                        <input type="number" class="form-control" id="patientAge" name="patientAge" required 
+                               min="0" max="120">
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                         <div class="invalid-feedback">Please enter a valid age (0-120)</div>
                     </div>
                     <div class="col-md-3">
@@ -293,20 +377,28 @@
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>
                         </select>
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                         <div class="invalid-feedback">Please select a gender</div>
                     </div>
                     <div class="col-md-6">
                         <label for="patientNIC" class="form-label">
                             <i class="bi bi-card-text"></i> NIC Number
                         </label>
-                        <input type="text" class="form-control" id="patientNIC" name="patientNIC" required pattern="[0-9]{9}[vVxX]|[0-9]{12}">
-                        <div class="invalid-feedback">Please enter a valid NIC number</div>
+                        <input type="text" class="form-control" id="patientNIC" name="patientNIC" required 
+                               pattern="[0-9]{9}[vVxX]|[0-9]{12}">
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
+                        <div class="invalid-feedback">Please enter a valid NIC number (9 digits + V/X or 12 digits)</div>
                     </div>
                     <div class="col-md-6">
                         <label for="patientPhone" class="form-label">
                             <i class="bi bi-telephone"></i> Phone Number
                         </label>
-                        <input type="tel" class="form-control" id="patientPhone" name="patientPhone" required pattern="[0-9]{10}">
+                        <input type="tel" class="form-control" id="patientPhone" name="patientPhone" required 
+                               pattern="[0-9]{10}">
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                         <div class="invalid-feedback">Please enter a valid 10-digit phone number</div>
                     </div>
                     <div class="col-md-6">
@@ -314,14 +406,19 @@
                             <i class="bi bi-envelope"></i> Email Address
                         </label>
                         <input type="email" class="form-control" id="patientEmail" name="patientEmail" required>
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
                         <div class="invalid-feedback">Please enter a valid email address</div>
                     </div>
                     <div class="col-md-6">
                         <label for="patientAddress" class="form-label">
                             <i class="bi bi-geo-alt"></i> Address
                         </label>
-                        <textarea class="form-control" id="patientAddress" name="patientAddress" required rows="3"></textarea>
-                        <div class="invalid-feedback">Please enter an address</div>
+                        <textarea class="form-control" id="patientAddress" name="patientAddress" required 
+                                  minlength="5" maxlength="200" rows="3"></textarea>
+                        <i class="bi bi-check-circle-fill validation-icon valid-icon"></i>
+                        <i class="bi bi-x-circle-fill validation-icon invalid-icon"></i>
+                        <div class="invalid-feedback">Please enter an address (5-200 characters)</div>
                     </div>
                 </div>
             </div>
@@ -333,26 +430,32 @@
                         <label for="medicalHistory" class="form-label">
                             <i class="bi bi-journal-medical"></i> Medical History
                         </label>
-                        <textarea class="form-control" id="medicalHistory" name="medicalHistory" rows="3"></textarea>
+                        <textarea class="form-control" id="medicalHistory" name="medicalHistory" rows="3" 
+                                  maxlength="500"></textarea>
+                        <div class="form-text">Optional - Maximum 500 characters</div>
                     </div>
                     <div class="col-md-12">
                         <label for="currentMedications" class="form-label">
                             <i class="bi bi-capsule"></i> Current Medications
                         </label>
-                        <textarea class="form-control" id="currentMedications" name="currentMedications" rows="3"></textarea>
+                        <textarea class="form-control" id="currentMedications" name="currentMedications" rows="3" 
+                                  maxlength="500"></textarea>
+                        <div class="form-text">Optional - Maximum 500 characters</div>
                     </div>
                     <div class="col-md-12">
                         <label for="allergies" class="form-label">
                             <i class="bi bi-exclamation-triangle"></i> Allergies
                         </label>
-                        <textarea class="form-control" id="allergies" name="allergies" rows="3"></textarea>
+                        <textarea class="form-control" id="allergies" name="allergies" rows="3" 
+                                  maxlength="500"></textarea>
+                        <div class="form-text">Optional - Maximum 500 characters</div>
                     </div>
                 </div>
             </div>
 
             <div class="d-flex justify-content-center gap-3 mt-4">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Add Channel
+                    <i class="bi bi-save"></i> Add Channel
                 </button>
                 <button type="button" class="btn btn-secondary" onclick="window.location.href='channel-table.html'">
                     <i class="bi bi-x-circle"></i> Cancel
@@ -369,32 +472,91 @@
 <script>
     const api = "/channel";
 
-    // Generate a unique Channel ID
+    // Set minimum date to today
+    document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+    // Generate Channel ID on page load
+    window.onload = function() {
+        generateChannelId();
+        initializeFormValidation();
+    };
+
     function generateChannelId() {
         const timestamp = new Date().getTime();
         const random = Math.floor(Math.random() * 1000);
-        return `CH${timestamp}${random}`;
+        const channelId = `CH${timestamp}${random}`;
+        document.getElementById('channelId').value = channelId;
     }
 
-    // Set the Channel ID when the page loads
-    window.onload = function() {
-        document.getElementById('channelId').value = generateChannelId();
+    function initializeFormValidation() {
+        const form = document.getElementById('channelForm');
         
-        // Initialize Bootstrap form validation
-        const forms = document.querySelectorAll('.needs-validation');
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
+        // Real-time validation
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                validateField(this);
+            });
+            
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
         });
-    };
+
+        // Form submission validation
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                // Show validation messages for all invalid fields
+                form.querySelectorAll('input, select, textarea').forEach(input => {
+                    validateField(input);
+                });
+            }
+            form.classList.add('was-validated');
+        });
+    }
+
+    function validateField(field) {
+        const isValid = field.checkValidity();
+        field.classList.toggle('is-invalid', !isValid);
+        field.classList.toggle('is-valid', isValid);
+        
+        // Custom validation for specific fields
+        if (field.id === 'patientEmail') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+        
+        if (field.id === 'patientPhone') {
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+        
+        if (field.id === 'patientNIC') {
+            const nicRegex = /^[0-9]{9}[vVxX]|[0-9]{12}$/;
+            if (!nicRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+    }
 
     function addChannel(event) {
         event.preventDefault();
+        
+        const form = document.getElementById('channelForm');
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return false;
+        }
+
         const loading = document.getElementById('loading');
         const successMessage = document.getElementById('successMessage');
         
@@ -439,6 +601,8 @@
             console.log('Add response:', data);
             loading.style.display = 'none';
             successMessage.style.display = 'block';
+            form.reset();
+            generateChannelId();
             setTimeout(() => {
                 window.location.href = 'channel-table.html';
             }, 2000);
