@@ -39,7 +39,7 @@
             padding: 40px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1),
-                       0 5px 15px rgba(0, 0, 0, 0.05);
+            0 5px 15px rgba(0, 0, 0, 0.05);
             backdrop-filter: blur(10px);
             animation: fadeIn 0.5s ease-out;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -91,7 +91,7 @@
 
         .form-control:focus, .form-select:focus {
             border-color: #007acc;
-            box-shadow: 0 0 0 4px rgba(0, 122, 204, 0.1);
+            box-shadow: 0 0 0 0.2rem rgba(0, 122, 204, 0.25);
         }
 
         .form-control:hover, .form-select:hover {
@@ -185,9 +185,38 @@
         }
 
         .invalid-feedback {
+            display: none;
+            width: 100%;
+            margin-top: 0.25rem;
             font-size: 0.875em;
             color: #dc3545;
-            margin-top: 4px;
+        }
+
+        .form-control.is-invalid ~ .invalid-feedback {
+            display: block;
+        }
+
+        .form-control.is-valid ~ .invalid-feedback {
+            display: none;
+        }
+
+        /* Validation Styles */
+        .form-control.is-valid {
+            border-color: #28a745;
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
         }
     </style>
 </head>
@@ -425,66 +454,6 @@
         });
     };
 
-    function updateChannel(event) {
-        event.preventDefault();
-        const loading = document.getElementById('loading');
-        const successMessage = document.getElementById('successMessage');
-        
-        loading.style.display = 'block';
-        successMessage.style.display = 'none';
-
-        const channelId = document.getElementById('channelId').value;
-        const formData = {
-            id: channelId,
-            hospital: document.getElementById('hospital').value,
-            specialization: document.getElementById('specialization').value,
-            doctorName: document.getElementById('doctorName').value,
-            date: document.getElementById('date').value,
-            time: document.getElementById('time').value,
-            patientName: document.getElementById('patientName').value,
-            patientAge: document.getElementById('patientAge').value,
-            patientGender: document.getElementById('patientGender').value,
-            patientNIC: document.getElementById('patientNIC').value,
-            patientPhone: document.getElementById('patientPhone').value,
-            patientEmail: document.getElementById('patientEmail').value,
-            patientAddress: document.getElementById('patientAddress').value,
-            medicalHistory: document.getElementById('medicalHistory').value,
-            currentMedications: document.getElementById('currentMedications').value,
-            allergies: document.getElementById('allergies').value
-        };
-
-        console.log('Updating channel with data:', formData);
-
-        fetch(api + "/update/" + channelId, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Update response:', data);
-            loading.style.display = 'none';
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                window.location.href = 'channel-table.html';
-            }, 2000);
-        })
-        .catch(error => {
-            console.error('Error updating channel:', error);
-            alert('Error updating channel. Please try again.');
-            loading.style.display = 'none';
-        });
-
-        return false;
-    }
-
     // Dynamic doctor list based on hospital and specialization
     const doctors = {
         'Asiri Central Hospital': {
@@ -529,9 +498,9 @@
         const specialization = document.getElementById('specialization').value;
         const doctorSelect = document.getElementById('doctorName');
         const currentDoctor = doctorSelect.value;
-        
+
         doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
-        
+
         if (hospital && specialization && doctors[hospital] && doctors[hospital][specialization]) {
             doctors[hospital][specialization].forEach(doctor => {
                 const option = document.createElement('option');
@@ -547,6 +516,250 @@
 
     document.getElementById('hospital').addEventListener('change', updateDoctorList);
     document.getElementById('specialization').addEventListener('change', updateDoctorList);
+
+    // Validation rules
+    const validationRules = {
+        patientName: {
+            pattern: /^[A-Za-z\s]{2,50}$/,
+            message: 'Name should be 2-50 characters long and contain only letters'
+        },
+        age: {
+            validate: (value) => {
+                const num = parseInt(value);
+                return !isNaN(num) && num >= 0 && num <= 120;
+            },
+            message: 'Age must be between 0 and 120'
+        },
+        nicNumber: {
+            pattern: /^(\d{9}[VX]|\d{12})$/,
+            message: 'NIC must be either 9 digits followed by V/X or 12 digits'
+        },
+        phoneNumber: {
+            pattern: /^\d{10}$/,
+            message: 'Phone number must be 10 digits'
+        },
+        email: {
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: 'Please enter a valid email address'
+        },
+        address: {
+            validate: (value) => value.length >= 5 && value.length <= 200,
+            message: 'Address must be between 5 and 200 characters'
+        },
+        date: {
+            validate: (value) => {
+                const selectedDate = new Date(value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return selectedDate >= today;
+            },
+            message: 'Date cannot be in the past'
+        },
+        time: {
+            validate: (value) => value !== '',
+            message: 'Please select a time'
+        },
+        doctor: {
+            validate: (value) => value !== '',
+            message: 'Please select a doctor'
+        },
+        hospital: {
+            validate: (value) => value !== '',
+            message: 'Please select a hospital'
+        }
+    };
+
+    // Form submission handler
+    document.getElementById('updateForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Remove any existing error alerts
+        const existingAlerts = document.querySelectorAll('.alert');
+        existingAlerts.forEach(alert => alert.remove());
+        
+        // Validate all fields
+        let isValid = true;
+        let firstInvalidField = null;
+        let errorMessages = [];
+
+        document.querySelectorAll('input, select').forEach(field => {
+            if (validationRules[field.id]) {
+                if (!validateField(field)) {
+                    isValid = false;
+                    if (!firstInvalidField) {
+                        firstInvalidField = field;
+                    }
+                    // Get the error message for this field
+                    const rule = validationRules[field.id];
+                    errorMessages.push(`${field.previousElementSibling.textContent.trim()}: ${rule.message}`);
+                }
+            }
+        });
+
+        if (!isValid) {
+            // Show error message with all validation errors
+            const errorAlert = document.createElement('div');
+            errorAlert.className = 'alert alert-danger alert-dismissible fade show';
+            errorAlert.innerHTML = `
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <strong>Please fix the following errors:</strong>
+                <ul class="mb-0 mt-2">
+                    ${errorMessages.map(msg => `<li>${msg}</li>`).join('')}
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.querySelector('.container').insertBefore(errorAlert, document.querySelector('.form-container'));
+
+            // Scroll to the first invalid field
+            if (firstInvalidField) {
+                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstInvalidField.focus();
+            }
+
+            // Add shake animation to invalid fields
+            document.querySelectorAll('.is-invalid').forEach(field => {
+                field.classList.add('shake');
+                setTimeout(() => field.classList.remove('shake'), 500);
+            });
+
+            return false;
+        }
+
+        // If validation passes, proceed with form submission
+        updateChannel(e);
+    });
+
+    // Add shake animation style
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        .alert ul {
+            padding-left: 20px;
+        }
+        .alert li {
+            margin-bottom: 5px;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Real-time validation function
+    function validateField(field) {
+        const value = field.value.trim();
+        const rule = validationRules[field.id];
+        
+        if (!rule) return true;
+
+        let isValid = false;
+        if (rule.pattern) {
+            isValid = rule.pattern.test(value);
+        } else if (rule.validate) {
+            isValid = rule.validate(value);
+        }
+
+        if (isValid) {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+            // Remove error message if it exists
+            const errorMessage = field.nextElementSibling;
+            if (errorMessage && errorMessage.classList.contains('invalid-feedback')) {
+                errorMessage.style.display = 'none';
+            }
+        } else {
+            field.classList.remove('is-valid');
+            field.classList.add('is-invalid');
+            // Show error message
+            const errorMessage = field.nextElementSibling;
+            if (errorMessage && errorMessage.classList.contains('invalid-feedback')) {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = rule.message;
+            }
+        }
+
+        return isValid;
+    }
+
+    // Add validation to all form fields
+    document.querySelectorAll('input, select').forEach(field => {
+        if (validationRules[field.id]) {
+            field.addEventListener('input', () => validateField(field));
+            field.addEventListener('blur', () => validateField(field));
+        }
+    });
+
+    function updateChannel(event) {
+        event.preventDefault();
+
+        const loading = document.getElementById('loading');
+        const successMessage = document.getElementById('successMessage');
+
+        loading.style.display = 'block';
+        successMessage.style.display = 'none';
+
+        const channelId = document.getElementById('channelId').value;
+        const formData = {
+            id: channelId,
+            hospital: document.getElementById('hospital').value,
+            specialization: document.getElementById('specialization').value,
+            doctorName: document.getElementById('doctorName').value,
+            date: document.getElementById('date').value,
+            time: document.getElementById('time').value,
+            patientName: document.getElementById('patientName').value,
+            patientAge: document.getElementById('patientAge').value,
+            patientGender: document.getElementById('patientGender').value,
+            patientNIC: document.getElementById('patientNIC').value,
+            patientPhone: document.getElementById('patientPhone').value,
+            patientEmail: document.getElementById('patientEmail').value,
+            patientAddress: document.getElementById('patientAddress').value,
+            medicalHistory: document.getElementById('medicalHistory').value,
+            currentMedications: document.getElementById('currentMedications').value,
+            allergies: document.getElementById('allergies').value
+        };
+
+        console.log('Updating channel with data:', formData);
+
+        fetch(api + "/update/" + channelId, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Update response:', data);
+                loading.style.display = 'none';
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'channel-table.html';
+                }, 2000);
+            })
+            .catch(error => {
+                console.error('Error updating channel:', error);
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-danger alert-dismissible fade show';
+                errorAlert.innerHTML = `
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Error updating channel. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+                document.querySelector('.container').insertBefore(errorAlert, document.querySelector('.form-container'));
+                loading.style.display = 'none';
+            });
+
+        return false;
+    }
 </script>
 </body>
 </html>

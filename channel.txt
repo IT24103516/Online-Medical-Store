@@ -1,1 +1,2 @@
-CH1747638510791871,Asiri Central Hospital,Dr. Sunil Fernando,Neurology,2025-05-23,03:38,Oshan Sadhanjana,26,Male,993102059V,0704120358,chamika@gmail.com,Uva Wellassa fffff,Nothing,Nothing,Bla bla bla,null
+CH1747643753966611,Asiri Central Hospital,,Cardiology,2025-05-29,14:06,Chamika Shashipriya,26,Male,993102059V,0704120358,chamika@gmail.com,Ambalangoda Galle,Nothing,Nothing,Nothing,null
+CH1747644052593761,Asiri Central Hospital,Dr. Kamal Perera,Cardiology,2025-05-19,14:10,Chamika,26,Male,993102059V,0704120358,chamika@gmail.com,Ambalangoda Galle,Nothing,Nothing,Nothing,null
