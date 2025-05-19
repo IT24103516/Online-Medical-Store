@@ -241,9 +241,6 @@
             <button class="btn btn-custom" onclick="sortChannels()">
                 <i class="bi bi-sort-alpha-down"></i> Sort by Doctor
             </button>
-            <button class="btn btn-custom" onclick="processQueue()">
-                <i class="bi bi-arrow-repeat"></i> Process Queue
-            </button>
         </div>
 
         <div class="table-container">
@@ -281,6 +278,9 @@
         <div class="text-center mt-4">
             <a href="channel.html" class="btn btn-custom">
                 <i class="bi bi-plus-circle"></i> Add New Channel
+            </a>
+            <a href="index.html" class="btn btn-custom">
+                <i class="bi bi-hospital feature-icon"></i> Return to Home Page
             </a>
         </div>
     </div>
@@ -343,23 +343,6 @@
             });
     }
 
-    function processQueue() {
-        const loading = document.getElementById('loading');
-        loading.style.display = 'block';
-
-        fetch(api + "/processQueue")
-            .then(res => res.json())
-            .then(data => {
-                loading.style.display = 'none';
-                alert(data.message);
-                loadAll();
-            })
-            .catch(error => {
-                console.error('Error processing queue:', error);
-                alert('Error processing queue. Please try again.');
-                loading.style.display = 'none';
-            });
-    }
 
     function deleteChannel(id) {
         if (confirm('Are you sure you want to delete this channel?')) {
