@@ -185,38 +185,41 @@
         }
 
         .invalid-feedback {
-            display: none;
-            width: 100%;
-            margin-top: 0.25rem;
             font-size: 0.875em;
             color: #dc3545;
+            margin-top: 4px;
+            display: none;
         }
 
-        .form-control.is-invalid ~ .invalid-feedback {
+        .was-validated .form-control:invalid ~ .invalid-feedback,
+        .was-validated .form-select:invalid ~ .invalid-feedback,
+        .form-control.is-invalid ~ .invalid-feedback,
+        .form-select.is-invalid ~ .invalid-feedback {
             display: block;
         }
 
-        .form-control.is-valid ~ .invalid-feedback {
+        .validation-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
             display: none;
         }
 
-        /* Validation Styles */
-        .form-control.is-valid {
-            border-color: #28a745;
-            padding-right: calc(1.5em + 0.75rem);
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right calc(0.375em + 0.1875rem) center;
-            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        .was-validated .form-control:valid ~ .validation-icon.valid-icon,
+        .was-validated .form-select:valid ~ .validation-icon.valid-icon,
+        .form-control.is-valid ~ .validation-icon.valid-icon,
+        .form-select.is-valid ~ .validation-icon.valid-icon {
+            display: block;
+            color: #198754;
         }
 
-        .form-control.is-invalid {
-            border-color: #dc3545;
-            padding-right: calc(1.5em + 0.75rem);
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right calc(0.375em + 0.1875rem) center;
-            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        .was-validated .form-control:invalid ~ .validation-icon.invalid-icon,
+        .was-validated .form-select:invalid ~ .validation-icon.invalid-icon,
+        .form-control.is-invalid ~ .validation-icon.invalid-icon,
+        .form-select.is-invalid ~ .validation-icon.invalid-icon {
+            display: block;
+            color: #dc3545;
         }
     </style>
 </head>
@@ -231,7 +234,7 @@
             <i class="bi bi-check-circle-fill"></i> Channel updated successfully!
         </div>
 
-        <form id="updateForm" class="needs-validation" onsubmit="return updateChannel(event)" novalidate>
+        <form id="updateForm" class="needs-validation" onsubmit="return validateAndSubmit(event)" novalidate>
             <div class="form-section">
                 <h3 class="form-section-title"><i class="bi bi-info-circle"></i> Basic Information</h3>
                 <div class="row g-3">
@@ -441,18 +444,154 @@
             updateDoctorList();
         }
 
-        // Initialize Bootstrap form validation
-        const forms = document.querySelectorAll('.needs-validation');
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
+        initializeFormValidation();
     };
+
+    function initializeFormValidation() {
+        const form = document.getElementById('updateForm');
+        
+        // Real-time validation
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                validateField(this);
+            });
+            
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+        });
+
+        // Form submission validation
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                // Show validation messages for all invalid fields
+                form.querySelectorAll('input, select, textarea').forEach(input => {
+                    validateField(input);
+                });
+            }
+            form.classList.add('was-validated');
+        });
+    }
+
+    function validateField(field) {
+        const isValid = field.checkValidity();
+        field.classList.toggle('is-invalid', !isValid);
+        field.classList.toggle('is-valid', isValid);
+        
+        // Custom validation for specific fields
+        if (field.id === 'patientEmail') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+        
+        if (field.id === 'patientPhone') {
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+        
+        if (field.id === 'patientNIC') {
+            const nicRegex = /^[0-9]{9}[vVxX]|[0-9]{12}$/;
+            if (!nicRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+
+        if (field.id === 'patientName') {
+            const nameRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!nameRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+
+        if (field.id === 'patientAge') {
+            const age = parseInt(field.value);
+            if (isNaN(age) || age < 0 || age > 120) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+
+        if (field.id === 'patientAddress') {
+            if (field.value.length < 5 || field.value.length > 200) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+
+        if (field.id === 'date') {
+            const selectedDate = new Date(field.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (selectedDate < today) {
+                field.classList.add('is-invalid');
+                field.classList.remove('is-valid');
+            }
+        }
+    }
+
+    function validateAndSubmit(event) {
+        event.preventDefault();
+        
+        const form = document.getElementById('updateForm');
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            
+            // Show validation messages for all invalid fields
+            form.querySelectorAll('input, select, textarea').forEach(input => {
+                validateField(input);
+            });
+
+            // Show error message with all validation errors
+            const errorMessages = [];
+            form.querySelectorAll('input, select, textarea').forEach(input => {
+                if (input.classList.contains('is-invalid')) {
+                    const label = input.previousElementSibling.textContent.trim();
+                    const feedback = input.nextElementSibling;
+                    if (feedback && feedback.classList.contains('invalid-feedback')) {
+                        errorMessages.push(`${label}: ${feedback.textContent}`);
+                    }
+                }
+            });
+
+            if (errorMessages.length > 0) {
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-danger alert-dismissible fade show';
+                errorAlert.innerHTML = `
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Please fix the following errors:</strong>
+                    <ul class="mb-0 mt-2">
+                        ${errorMessages.map(msg => `<li>${msg}</li>`).join('')}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector('.container').insertBefore(errorAlert, document.querySelector('.form-container'));
+
+                // Scroll to the first invalid field
+                const firstInvalid = form.querySelector('.is-invalid');
+                if (firstInvalid) {
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstInvalid.focus();
+                }
+            }
+
+            return false;
+        }
+
+        // If validation passes, proceed with form submission
+        updateChannel(event);
+        return false;
+    }
 
     // Dynamic doctor list based on hospital and specialization
     const doctors = {
@@ -517,188 +656,12 @@
     document.getElementById('hospital').addEventListener('change', updateDoctorList);
     document.getElementById('specialization').addEventListener('change', updateDoctorList);
 
-    // Validation rules
-    const validationRules = {
-        patientName: {
-            pattern: /^[A-Za-z\s]{2,50}$/,
-            message: 'Name should be 2-50 characters long and contain only letters'
-        },
-        age: {
-            validate: (value) => {
-                const num = parseInt(value);
-                return !isNaN(num) && num >= 0 && num <= 120;
-            },
-            message: 'Age must be between 0 and 120'
-        },
-        nicNumber: {
-            pattern: /^(\d{9}[VX]|\d{12})$/,
-            message: 'NIC must be either 9 digits followed by V/X or 12 digits'
-        },
-        phoneNumber: {
-            pattern: /^\d{10}$/,
-            message: 'Phone number must be 10 digits'
-        },
-        email: {
-            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: 'Please enter a valid email address'
-        },
-        address: {
-            validate: (value) => value.length >= 5 && value.length <= 200,
-            message: 'Address must be between 5 and 200 characters'
-        },
-        date: {
-            validate: (value) => {
-                const selectedDate = new Date(value);
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                return selectedDate >= today;
-            },
-            message: 'Date cannot be in the past'
-        },
-        time: {
-            validate: (value) => value !== '',
-            message: 'Please select a time'
-        },
-        doctor: {
-            validate: (value) => value !== '',
-            message: 'Please select a doctor'
-        },
-        hospital: {
-            validate: (value) => value !== '',
-            message: 'Please select a hospital'
-        }
-    };
-
-    // Form submission handler
-    document.getElementById('updateForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Remove any existing error alerts
-        const existingAlerts = document.querySelectorAll('.alert');
-        existingAlerts.forEach(alert => alert.remove());
-        
-        // Validate all fields
-        let isValid = true;
-        let firstInvalidField = null;
-        let errorMessages = [];
-
-        document.querySelectorAll('input, select').forEach(field => {
-            if (validationRules[field.id]) {
-                if (!validateField(field)) {
-                    isValid = false;
-                    if (!firstInvalidField) {
-                        firstInvalidField = field;
-                    }
-                    // Get the error message for this field
-                    const rule = validationRules[field.id];
-                    errorMessages.push(`${field.previousElementSibling.textContent.trim()}: ${rule.message}`);
-                }
-            }
-        });
-
-        if (!isValid) {
-            // Show error message with all validation errors
-            const errorAlert = document.createElement('div');
-            errorAlert.className = 'alert alert-danger alert-dismissible fade show';
-            errorAlert.innerHTML = `
-                <i class="bi bi-exclamation-triangle-fill"></i>
-                <strong>Please fix the following errors:</strong>
-                <ul class="mb-0 mt-2">
-                    ${errorMessages.map(msg => `<li>${msg}</li>`).join('')}
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            document.querySelector('.container').insertBefore(errorAlert, document.querySelector('.form-container'));
-
-            // Scroll to the first invalid field
-            if (firstInvalidField) {
-                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                firstInvalidField.focus();
-            }
-
-            // Add shake animation to invalid fields
-            document.querySelectorAll('.is-invalid').forEach(field => {
-                field.classList.add('shake');
-                setTimeout(() => field.classList.remove('shake'), 500);
-            });
-
-            return false;
-        }
-
-        // If validation passes, proceed with form submission
-        updateChannel(e);
-    });
-
-    // Add shake animation style
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        .shake {
-            animation: shake 0.5s ease-in-out;
-        }
-        .alert ul {
-            padding-left: 20px;
-        }
-        .alert li {
-            margin-bottom: 5px;
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Real-time validation function
-    function validateField(field) {
-        const value = field.value.trim();
-        const rule = validationRules[field.id];
-        
-        if (!rule) return true;
-
-        let isValid = false;
-        if (rule.pattern) {
-            isValid = rule.pattern.test(value);
-        } else if (rule.validate) {
-            isValid = rule.validate(value);
-        }
-
-        if (isValid) {
-            field.classList.remove('is-invalid');
-            field.classList.add('is-valid');
-            // Remove error message if it exists
-            const errorMessage = field.nextElementSibling;
-            if (errorMessage && errorMessage.classList.contains('invalid-feedback')) {
-                errorMessage.style.display = 'none';
-            }
-        } else {
-            field.classList.remove('is-valid');
-            field.classList.add('is-invalid');
-            // Show error message
-            const errorMessage = field.nextElementSibling;
-            if (errorMessage && errorMessage.classList.contains('invalid-feedback')) {
-                errorMessage.style.display = 'block';
-                errorMessage.textContent = rule.message;
-            }
-        }
-
-        return isValid;
-    }
-
-    // Add validation to all form fields
-    document.querySelectorAll('input, select').forEach(field => {
-        if (validationRules[field.id]) {
-            field.addEventListener('input', () => validateField(field));
-            field.addEventListener('blur', () => validateField(field));
-        }
-    });
-
     function updateChannel(event) {
         event.preventDefault();
-
+        
         const loading = document.getElementById('loading');
         const successMessage = document.getElementById('successMessage');
-
+        
         loading.style.display = 'block';
         successMessage.style.display = 'none';
 
@@ -731,32 +694,32 @@
             },
             body: JSON.stringify(formData)
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Update response:', data);
-                loading.style.display = 'none';
-                successMessage.style.display = 'block';
-                setTimeout(() => {
-                    window.location.href = 'channel-table.html';
-                }, 2000);
-            })
-            .catch(error => {
-                console.error('Error updating channel:', error);
-                const errorAlert = document.createElement('div');
-                errorAlert.className = 'alert alert-danger alert-dismissible fade show';
-                errorAlert.innerHTML = `
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Update response:', data);
+            loading.style.display = 'none';
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                window.location.href = 'channel-table.html';
+            }, 2000);
+        })
+        .catch(error => {
+            console.error('Error updating channel:', error);
+            const errorAlert = document.createElement('div');
+            errorAlert.className = 'alert alert-danger alert-dismissible fade show';
+            errorAlert.innerHTML = `
                 <i class="bi bi-exclamation-triangle-fill"></i>
                 Error updating channel. Please try again.
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
-                document.querySelector('.container').insertBefore(errorAlert, document.querySelector('.form-container'));
-                loading.style.display = 'none';
-            });
+            document.querySelector('.container').insertBefore(errorAlert, document.querySelector('.form-container'));
+            loading.style.display = 'none';
+        });
 
         return false;
     }

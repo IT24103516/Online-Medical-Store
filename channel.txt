@@ -1,2 +1,2 @@
-CH1747643753966611,Asiri Central Hospital,,Cardiology,2025-05-29,14:06,Chamika Shashipriya,26,Male,993102059V,0704120358,chamika@gmail.com,Ambalangoda Galle,Nothing,Nothing,Nothing,null
-CH1747644052593761,Asiri Central Hospital,Dr. Kamal Perera,Cardiology,2025-05-19,14:10,Chamika,26,Male,993102059V,0704120358,chamika@gmail.com,Ambalangoda Galle,Nothing,Nothing,Nothing,null
+CH1747643753966611,Asiri Central Hospital,Dr. Kamal Perera,Cardiology,2025-05-29,14:06,Chamika Shashipriya,26,Male,993102059V,0704120358,chamika@gmail.com,Ambalangoda Galle,Nothing,Nothing,Nothing,null
+CH1747644148145287,Lanka Hospitals,Dr. Priyanka Jayawardena,Neurology,2025-05-29,14:12,Vikun,22,Male,993102059V,0704120358,vikum@gmail.com,Ambalangoda Galle,Nothing,Nothing,Nothing,null
