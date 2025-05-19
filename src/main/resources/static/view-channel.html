@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Channel Details - E-Channeling System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 30px;
+            background: url('/images/2.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #003366;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 122, 204, 0.1), rgba(0, 64, 128, 0.1));
+            backdrop-filter: blur(5px);
+            z-index: -1;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1),
+                       0 5px 15px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-box {
+            border: none;
+            background: linear-gradient(135deg, rgba(0, 122, 204, 0.1), rgba(0, 64, 128, 0.1));
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 122, 204, 0.15);
+        }
+
+        .header-box h1 {
+            font-size: 2.8em;
+            color: #004080;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .details-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #004080;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #007acc;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0, 122, 204, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .detail-row:hover {
+            background: rgba(0, 122, 204, 0.1);
+            transform: translateX(5px);
+        }
+
+        .detail-label {
+            flex: 1;
+            font-weight: 600;
+            color: #004080;
+            min-width: 150px;
+        }
+
+        .detail-value {
+            flex: 2;
+            color: #333;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .button-group button {
+            background: linear-gradient(135deg, #007acc, #004080);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(0, 122, 204, 0.2);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            min-width: 180px;
+        }
+
+        .button-group button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .button-group button:hover::before {
+            left: 100%;
+        }
+
+        .button-group button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.3);
+        }
+
+        .button-group button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 122, 204, 0.2);
+        }
+
+        .button-group button.back {
+            background: linear-gradient(135deg, #004080, #002f66);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .header-box h1 {
+                font-size: 2.2em;
+            }
+
+            .detail-row {
+                flex-direction: column;
+            }
+
+            .detail-label {
+                margin-bottom: 5px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button-group button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header-box">
+        <h1>Channel Details</h1>
+    </div>
+
+    <div class="details-section">
+        <div class="section-title">Basic Information</div>
+        <div class="detail-row">
+            <div class="detail-label">Channel ID:</div>
+            <div class="detail-value" id="id"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Hospital/Clinic:</div>
+            <div class="detail-value" id="hospital"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Doctor Name:</div>
+            <div class="detail-value" id="doctorName"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Specialization:</div>
+            <div class="detail-value" id="specialization"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Date:</div>
+            <div class="detail-value" id="date"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Time:</div>
+            <div class="detail-value" id="time"></div>
+        </div>
+    </div>
+
+    <div class="details-section">
+        <div class="section-title">Patient Information</div>
+        <div class="detail-row">
+            <div class="detail-label">Full Name:</div>
+            <div class="detail-value" id="patientName"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Age:</div>
+            <div class="detail-value" id="patientAge"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Gender:</div>
+            <div class="detail-value" id="patientGender"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">NIC Number:</div>
+            <div class="detail-value" id="patientNIC"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Phone Number:</div>
+            <div class="detail-value" id="patientPhone"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Email Address:</div>
+            <div class="detail-value" id="patientEmail"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Address:</div>
+            <div class="detail-value" id="patientAddress"></div>
+        </div>
+    </div>
+
+    <div class="details-section">
+        <div class="section-title">Medical Information</div>
+        <div class="detail-row">
+            <div class="detail-label">Medical History:</div>
+            <div class="detail-value" id="medicalHistory"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Current Medications:</div>
+            <div class="detail-value" id="currentMedications"></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Allergies:</div>
+            <div class="detail-value" id="allergies"></div>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button class="back" onclick="window.location.href='channel-table.html'">Back to List</button>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        
+        // List of all fields to populate
+        const fields = [
+            'id', 'hospital', 'specialization', 'doctorName', 'date', 'time',
+            'patientName', 'patientAge', 'patientGender', 'patientNIC',
+            'patientPhone', 'patientEmail', 'patientAddress',
+            'medicalHistory', 'currentMedications', 'allergies'
+        ];
+
+        // Populate each field
+        fields.forEach(field => {
+            const element = document.getElementById(field);
+            if (element) {
+                const value = params.get(field);
+                element.textContent = value || 'Not provided';
+            }
+        });
+    };
+</script>
+</body>
+</html> 
