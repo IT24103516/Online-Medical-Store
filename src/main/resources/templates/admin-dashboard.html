@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/admin/medicines">Medicines</a>
+    <a href="/admin/orders">Orders</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<div class="container">
+    <h1>Admin - Manage Medicines</h1>
+    <a href="/admin/medicines/add"><button>Add New Medicine</button></a>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price (LKR)</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="med : ${medicines}">
+            <td th:text="${med.id}"></td>
+            <td th:text="${med.name}"></td>
+            <td th:text="${med.price}"></td>
+            <td><img th:src="@{'/images/' + ${med.imageName}}" width="80"/></td>
+            <td>
+                <a th:href="@{'/admin/medicines/edit/' + ${med.id}}">Edit</a> |
+                <a th:href="@{'/admin/medicines/delete/' + ${med.id}}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

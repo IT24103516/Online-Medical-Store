@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/user/medicines">Medicines</a>
+    <a href="/user/cart">Cart</a>
+    <a href="/user/orders">My Orders</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<div class="container">
+    <h1>Available Medicines</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="med : ${medicines}">
+            <form th:action="@{'/user/cart/add/' + ${med.id}}" method="post">
+                <td th:text="${med.name}"></td>
+                <td th:text="${med.price}"></td>
+                <td><img th:src="@{'/images/' + ${med.imageName}}" width="80"/></td>
+                <td><input type="number" name="quantity" value="1" min="1" required/></td>
+                <td><button type="submit">Add to Cart</button></td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
