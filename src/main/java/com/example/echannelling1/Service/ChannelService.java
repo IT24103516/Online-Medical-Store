@@ -18,16 +18,7 @@ public class ChannelService {
         saveToFile();
     }
 
-    public boolean updateChannel(String id, Channel updated) {
-        for (int i = 0; i < channelList.size(); i++) {
-            if (channelList.get(i).getId().equals(id)) {
-                channelList.set(i, updated);
-                saveToFile();
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     public boolean deleteChannel(String id) {
         boolean removed = channelList.removeIf(c -> c.getId().equals(id));
