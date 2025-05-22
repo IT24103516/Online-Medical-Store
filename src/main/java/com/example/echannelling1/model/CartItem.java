@@ -1,5 +1,7 @@
 package com.example.echannelling1.model;
 
+
+
 public class CartItem {
     private String medicineId;
     private String medicineName;
