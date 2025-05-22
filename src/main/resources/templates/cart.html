@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/scripts.js"></script>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/user/medicines">Medicines</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<div class="container">
+    <h1>Your Cart</h1>
+
+    <div th:if="${#lists.isEmpty(cart)}">
+        <p>Your cart is empty.</p>
+    </div>
+
+    <table th:if="${not #lists.isEmpty(cart)}">
+        <thead>
+        <tr>
+            <th>Medicine</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item, iter : ${cart}">
+            <td th:text="${item.medicineName}"></td>
+            <td th:text="${item.unitPrice} + ' LKR'"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${item.totalPrice} + ' LKR'"></td>
+            <td>
+                <a th:href="@{'/user/cart/remove/' + ${iter.index}}">Remove</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${not #lists.isEmpty(cart)}">Total: <strong th:text="${total} + ' LKR'"></strong></p>
+
+    <form th:action="@{/user/cart/checkout}" method="post" onsubmit="return confirmOrder()">
+        <button type="submit" class="btn">Confirm Order</button>
+    </form>
+</div>
+
+</body>
+</html>
