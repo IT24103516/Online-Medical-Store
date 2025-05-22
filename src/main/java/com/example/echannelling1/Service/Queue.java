@@ -1,6 +1,6 @@
 package com.example.echannelling1.Service;
 
-import com.medicalstore.model.Order;
+import com.example.echannelling1.model.Order;
 
 import java.util.LinkedList;
 import java.util.List;
