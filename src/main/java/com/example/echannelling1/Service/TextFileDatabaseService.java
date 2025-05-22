@@ -1,5 +1,6 @@
 package com.example.echannelling1.Service;
 
+import com.example.echannelling1.model.Order;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -17,7 +18,7 @@ public class TextFileDatabaseService {
 
     public void saveOrder(Order order) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DB_FILE, true))) {
-            writer.write(order.toString());
+            writer.write(order.toFileString());  // use toFileString, not toString
             writer.newLine();
         }
     }
@@ -34,22 +35,21 @@ public class TextFileDatabaseService {
         }
     }
 
-    public Order getOrderById(Long id) throws IOException {
+    public Order getOrderById(String id) throws IOException {
         return getAllOrders().stream()
-                .filter(order -> order.getId().equals(id))
+                .filter(order -> order.getOrderId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
-    public void deleteOrder(Long id) throws IOException {
+    public void deleteOrder(String id) throws IOException {
         List<Order> orders = getAllOrders().stream()
-                .filter(order -> !order.getId().equals(id))
+                .filter(order -> !order.getOrderId().equals(id))
                 .collect(Collectors.toList());
 
-        // Rewrite the entire file without the deleted order
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DB_FILE))) {
             for (Order order : orders) {
-                writer.write(order.toString());
+                writer.write(order.toFileString());
                 writer.newLine();
             }
         }

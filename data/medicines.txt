@@ -1,0 +1,5 @@
+20034|paracetamol|2600.0|downloadpara.png
+20035|Asprin|210.0|asprin.png
+20036|Vicks Inhaler Nasal Stick|1350.0|inar.png
+20037|Clear eyes|890.0|eyes.png
+null| Coco Vasline |850.0|cocovaseline.png

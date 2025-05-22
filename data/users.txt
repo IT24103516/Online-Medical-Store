@@ -1,0 +1,7 @@
+6daa1e93-9022-4436-81eb-fae1bf14abc7|kaveesharashmika|kaveesharashmika456@gmail.com|1234|user
+d3dcfc17-fc6e-4686-a2aa-461f3b4ac7cb|nisa|nisa@gmail.com|1212|user
+ea96794e-d19a-4dc3-82f1-a0d8141834fc|havindu|havindusineth@gmail.com|123|user
+2748f06e-52f9-41b5-a017-78901f76f681|havindu|havindu@gmail.com|123|user
+a89f6f06-7b58-4bbd-b2b5-ebd935a03670|admin|admin@gmail.com|1234|admin
+f5c7137f-6b87-4697-9e76-e5ebd1970677|chamith|chamit@mail.com|2003|user
+76b900af-b4b6-41b7-afcc-604415f90e9d|malintha perera|malintha@gmail.com|Malintha|user
