@@ -1,8 +1,8 @@
 package com.example.echannelling1.Controller;
 
-import com.medicalstore.model.Medicine;
-import com.medicalstore.service.MedicineService;
-import com.medicalstore.service.QuickSort;
+import com.example.echannelling1.model.Medicine;
+import com.example.echannelling1.Service.MedicineService;
+import com.example.echannelling1.Service.QuickSort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,7 @@
 package com.example.echannelling1.Service;
 
-import com.medicalstore.model.Medicine;
-import com.medicalstore.util.FileUtil;
+import com.example.echannelling1.model.Medicine;
+import com.example.echannelling1.util.FileUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
