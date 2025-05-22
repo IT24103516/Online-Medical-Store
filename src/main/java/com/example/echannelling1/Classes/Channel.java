@@ -8,7 +8,16 @@ public class Channel {
     private String date;
     private String time;
     private String patientName;
-
+    private String patientAge;
+    private String patientGender;
+    private String patientNIC;
+    private String patientPhone;
+    private String patientEmail;
+    private String patientAddress;
+    private String medicalHistory;
+    private String currentMedications;
+    private String allergies;
+    private String paymentMethod;
 
     public Channel(String id, String hospital, String doctorName, String specialization, String date, String time,
                   String patientName, String patientAge, String patientGender, String patientNIC, String patientPhone,
