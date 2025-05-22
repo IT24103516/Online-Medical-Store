@@ -1,9 +1,9 @@
 package com.example.echannelling1.Controller;
 
-import com.medicalstore.model.Medicine;
-import com.medicalstore.model.Order;
-import com.medicalstore.service.MedicineService;
-import com.medicalstore.service.OrderService;
+import com.example.echannelling1.model.Medicine;
+import com.example.echannelling1.model.Order;
+import com.example.echannelling1.Service.MedicineService;
+import com.example.echannelling1.Service.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
