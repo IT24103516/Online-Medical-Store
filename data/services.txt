@@ -1,0 +1,6 @@
+1|Ambulance Service|Emergency ambulance with oxygen.|Emergency|+94771234567|Colombo|Rs. 3000|Ambulance.jpg
+2|Courier Service|Fast delivery of prescriptions.|Delivery|+94773334444|Kandy|Rs. 1000|courier.png
+3|Lab Tests|Blood and urine tests with home visit.|Diagnostics|+94778889999|Galle|Rs. 1500|lab.jpg
+4|Medical Institute|Learn about health education.|Education|+94770011223|Jaffna|Free|education.png
+6acdc306-8087-466c-bef8-2eb612aaa401|home visit sepa |ghjk|sax|0914428653|Galle|3400|dd4b07d7-acb6-45d0-a70f-ef74f61d7d52_car.jpg
+780c06d6-a1e4-42bd-91d1-0c55550f3709|eertet|tete|adsd|tttt|Galle|365|0c53fda2-573f-4ebd-99be-585dbb50b0f5_car.jpg
