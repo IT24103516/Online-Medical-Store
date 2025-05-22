@@ -62,27 +62,4 @@ public class Order {
     public String getUserName() { return userName; }
     public List<CartItem> getItems() { return items; }
     public double getTotalPrice() { return totalPrice; }
-
-    // Setters
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setItems(List<CartItem> items) {
-        this.items = items;
-        // Recalculate total price when items are changed
-        this.totalPrice = items.stream().mapToDouble(CartItem::getTotalPrice).sum();
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 }
